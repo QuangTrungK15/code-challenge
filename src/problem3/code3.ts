@@ -35,6 +35,7 @@ const WalletPage: React.FC<Props> = ({ children, ...rest }) => {
     return balances
       .filter((balance): balance is WalletBalance => {
         const priority = getPriority(balance.blockchain);
+        // showing only zero/negative balances is usually wrong, the list should show values that have a positive balance on known blockchains
         return priority > -99 && balance.amount > 0;
       })
       .sort((lhs, rhs) => {
