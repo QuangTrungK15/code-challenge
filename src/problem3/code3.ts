@@ -1,85 +1,69 @@
 interface WalletBalance {
   currency: string;
   amount: number;
-  blockchain: string; //add missing blockchain property
+  blockchain: string;
 }
 
-//extend from WalletBalance because it has some properties which FormattedWalletBalance needs
-interface FormattedWalletBalance extends WalletBalance{
+// should use extends instead of interface
+interface FormattedWalletBalance extends WalletBalance {
   formatted: string;
 }
 
-interface Props extends BoxProps {
-  children: React.ReactNode;
+interface Props extends BoxProps {}
+
+// create a constant here and prevent duplicate code
+const BLOCKCHAIN_PRIORITY: Record<string, number> = {
+  Osmosis: 100,
+  Ethereum: 50,
+  Arbitrum: 100,
+  Zilliqa: 100,
+  Neo: 100,
+};
+
+// this function doesn't depend on the props or state, so it can be moved outside the component
+function getPriority(blockchain: string): number {
+  return BLOCKCHAIN_PRIORITY[blockchain] ?? -99;
 }
 
-
-//We should fix set of blockchain priority values that are known for reusing and prevent writing the same in other places
-const BlockchainPriority: Record<string,number> =  {
-    'Osmosis' : 100,
-    'Ethereum' : 50,
-    'Arbitrum' : 100,
-    'Zilliqa' : 100,
-    'Neo' : 100,
-}
-
-const WalletPage: React.FC<Props> = (props: Props) => {
-  const { children, ...rest } = props;
+const WalletPage: React.FC<Props> = ({ children, ...rest }) => {
   const balances = useWalletBalances();
   const prices = usePrices();
-  
-  
-  const getPriority = (blockchain: string): number => {
-    return BlockchainPriority[blockchain] ?? -99;
-}
-
-  const sortedBalances = useMemo(() => {
-    return balances.filter((balance: WalletBalance) => {
-		  const balancePriority = getPriority(balance.blockchain);
-		  if (balancePriority > -99) {
-		     if (balance.amount <= 0) {
-		       return true;
-		     }
-		  }
-		  return false
-		}).sort((lhs: WalletBalance, rhs: WalletBalance) => {
-			const leftPriority = getPriority(lhs.blockchain);
-		  const rightPriority = getPriority(rhs.blockchain);
-		  if (leftPriority > rightPriority) {
-		    return -1;
-		  } else if (rightPriority > leftPriority) {
-		    return 1;
-		  }
-    });
-  }, [balances, prices]);
 
 
+  //Remove prices in useMemo because we don't need them here
+  const formattedBalances = useMemo(() => {
+    return balances
+      .filter((balance): balance is WalletBalance => {
+        const priority = getPriority(balance.blockchain);
+        return priority > -99 && balance.amount > 0;
+      })
+      .sort((lhs, rhs) => {
+        // this will keeps the sort stable and logic clear
+        const leftPriority = getPriority(lhs.blockchain);
+        const rightPriority = getPriority(rhs.blockchain);
+        return rightPriority - leftPriority;
+      })
+      .map((balance) => ({
+        ...balance,
+        formatted: balance.amount.toFixed(),
+      }));
+  }, [balances]);
 
-  
-  const formattedBalances = sortedBalances.map((balance: WalletBalance) => {
-    return {
-      ...balance,
-      formatted: balance.amount.toFixed()
-    }
-  })
+  const rows = formattedBalances.map((balance) => {
+    // avoids undefined * number -> NaN
+    const usdValue = (prices[balance.currency] ?? 0) * balance.amount;
 
-  const rows = formattedBalances.map((balance: FormattedWalletBalance, index: number) => {
-    const formattedAmount =  balance.amount.toFixed();
-    const usdValue = prices[balance.currency] * balance.amount;
+    // Index keys are unstable when the list is filtered or sorted, should use a unique key instead
     return (
-      <WalletRow 
+      <WalletRow
         className={classes.row}
-        key={index}
+        key={`${balance.blockchain}-${balance.currency}`}
         amount={balance.amount}
         usdValue={usdValue}
         formattedAmount={balance.formatted}
       />
-    )
-  })
+    );
+  });
 
-  return (
-    <div {...rest}>
-      {rows}
-    </div>
-  )
-}
+  return <div {...rest}>{rows}</div>;
+};
