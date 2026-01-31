@@ -35,6 +35,7 @@ const Input: FC<InputProps> = ({
       value={inputValue}
       disabled={disabled}
       min={0}
+      step={0.01}
       max={MAXIMUM_VALUE}
       placeholder="Enter amount"
       onChange={handleChange}
