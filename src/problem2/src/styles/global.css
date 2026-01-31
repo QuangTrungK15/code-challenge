@@ -1,0 +1,42 @@
+@import './fonts.css';
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Roboto', 'Arial', sans-serif;
+  --font-roboto: 'Roboto', 'Arial', sans-serif;
+
+  --color-text: #4a4a4a;
+  --color-main: #516ae4;
+  --color-main-hover: #3d57d9;
+  --color-main-muted: rgba(81, 106, 228, 0.12);
+  --color-muted: #a0a5ba;
+  --color-surface-tint: #f0f3ff;
+  --color-placeholder: #9a9fbf;
+
+
+  --color-border: #9a9fbf;
+  --color-border-focus: #516ae4;
+  --color-error: #ef4444;
+
+  --bg-dropdown-icon: url('../assets/icons/dropdown_icon.svg');
+  --bg-swap-icon: url('../assets/icons/swap_icon.svg');
+}
+
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
