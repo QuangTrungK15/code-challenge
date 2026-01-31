@@ -23,9 +23,9 @@ const Input: FC<InputProps> = ({
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseFloat(e.target.value) || 0;
-    setInputValue(Number(newValue.toFixed(2)));
-    debouncedOnChange(Number(newValue.toFixed(2)));
+    const newValue = Number(parseFloat(e.target.value).toFixed(2)) || null;
+    setInputValue(newValue as number);
+    debouncedOnChange(newValue as number);
   };
 
   return (
@@ -36,7 +36,6 @@ const Input: FC<InputProps> = ({
       disabled={disabled}
       min={0}
       max={MAXIMUM_VALUE}
-      step="0.01"
       placeholder="Enter amount"
       onChange={handleChange}
       className={`bg-surface-tint border-border w-full h-18 px-6 py-5 border text-base text-text placeholder:text-placeholder focus:transparent focus:outline-0 rounded-2xl ${disabled ? "opacity-50 cursor-not-allowed" : ""} ${className}`}
