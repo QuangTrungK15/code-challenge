@@ -1,9 +1,9 @@
-@import './fonts.css';
-@import 'tailwindcss';
+@import "./fonts.css";
+@import "tailwindcss";
 
 @theme {
-  --font-sans: 'Roboto', 'Arial', sans-serif;
-  --font-roboto: 'Roboto', 'Arial', sans-serif;
+  --font-sans: "Roboto", "Arial", sans-serif;
+  --font-roboto: "Roboto", "Arial", sans-serif;
 
   --color-text: #4a4a4a;
   --color-main: #516ae4;
@@ -13,19 +13,17 @@
   --color-surface-tint: #f0f3ff;
   --color-placeholder: #9a9fbf;
 
-
   --color-border: #9a9fbf;
   --color-border-focus: #516ae4;
   --color-error: #ef4444;
 
-  --bg-dropdown-icon: url('../assets/icons/dropdown_icon.svg');
-  --bg-swap-icon: url('../assets/icons/swap_icon.svg');
+  --bg-dropdown-icon: url("../assets/icons/dropdown_icon.svg");
+  --bg-swap-icon: url("../assets/icons/swap_icon.svg");
 }
 
-
 @layer utilities {
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+  .scrollbar-hide::-webkit-scrollbar-thumb {
+    border-radius: 10px;
   }
 }
 
@@ -37,6 +35,6 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
