@@ -54,7 +54,7 @@ const DropDown: FC<DropDownProps> = ({ dataSet, selectOption, value }) => {
         <div className="absolute z-50 left-0 top-full overflow-hidden border border-placeholder rounded-2xl shadow-lg bg-white mt-1 w-40">
           <ul
             id="dropdown"
-            className="max-h-52 mt-0.5 w-full bg-surface-tint overflow-y-auto duration-200 scrollbar-hide"
+            className="max-h-52 mt-0.5 w-full bg-surface-tint overflow-y-auto duration-200"
           >
             {data &&
               data.length > 0 &&
