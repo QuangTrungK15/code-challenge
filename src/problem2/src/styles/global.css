@@ -21,12 +21,6 @@
   --bg-swap-icon: url("../assets/icons/swap_icon.svg");
 }
 
-@layer utilities {
-  .scrollbar-hide::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-  }
-}
-
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
