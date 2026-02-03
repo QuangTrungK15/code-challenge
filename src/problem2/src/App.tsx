@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import DropDown from "@/components/DropDown";
 import Input from "@/components/Input";
 import { computeOutputAmount } from "@/utils/common";
@@ -7,7 +7,6 @@ import { SWAP_LOADING_DURATION_MS, MAXIMUM_VALUE } from "@/constant";
 
 function App() {
   const [inputAmount, setInputAmount] = useState(0);
-  const [outputAmount, setOutputAmount] = useState(0);
   const [selectedInputIndex, setSelectedInputIndex] = useState(0);
   const [selectedOutputIndex, setSelectedOutputIndex] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -16,6 +15,9 @@ function App() {
 
   const priceFrom = dataSet[selectedInputIndex]?.price ?? 0;
   const priceTo = dataSet[selectedOutputIndex]?.price ?? 0;
+
+
+  let computedOutputAmount = useMemo(() => computeOutputAmount(inputAmount, priceFrom, priceTo), [inputAmount, priceFrom, priceTo, selectedInputIndex, selectedOutputIndex]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +32,6 @@ function App() {
     } finally {
       setIsSubmitting(false);
       setInputAmount(0);
-      setOutputAmount(0);
     }
   };
 
@@ -44,7 +45,6 @@ function App() {
 
   useEffect(() => {
     if (!inputAmount || inputAmount > MAXIMUM_VALUE) return;
-    setOutputAmount(computeOutputAmount(inputAmount, priceFrom, priceTo));
   }, [
     inputAmount,
     selectedInputIndex,
@@ -56,8 +56,7 @@ function App() {
   const handleSwap = () => {
     setSelectedInputIndex(selectedOutputIndex);
     setSelectedOutputIndex(selectedInputIndex);
-    setInputAmount(outputAmount);
-    setOutputAmount(inputAmount);
+    setInputAmount(computedOutputAmount);
   };
 
   return (
@@ -111,9 +110,9 @@ function App() {
             <label className="font-medium text-text">Amount</label>
             <Input
               id="output-amount"
-              value={outputAmount}
+              value={computedOutputAmount}
               disabled
-              onChange={setOutputAmount}
+              onChange={() => { }}
             />
           </div>
         </div>
