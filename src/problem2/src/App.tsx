@@ -3,7 +3,7 @@ import DropDown from "@/components/DropDown";
 import Input from "@/components/Input";
 import { computeOutputAmount } from "@/utils/common";
 import { useFetchPrices } from "@/hooks/useFetchPrices";
-import { SWAP_LOADING_DURATION_MS, MAXIMUM_VALUE } from "@/constant";
+import { SWAP_LOADING_DURATION_MS } from "@/constant";
 
 function App() {
   const [inputAmount, setInputAmount] = useState(0);
@@ -17,7 +17,7 @@ function App() {
   const priceTo = dataSet[selectedOutputIndex]?.price ?? 0;
 
 
-  let computedOutputAmount = useMemo(() => computeOutputAmount(inputAmount, priceFrom, priceTo), [inputAmount, priceFrom, priceTo, selectedInputIndex, selectedOutputIndex]);
+  let computedOutputAmount = useMemo(() => computeOutputAmount(inputAmount, priceFrom, priceTo), [inputAmount, priceFrom, priceTo]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
