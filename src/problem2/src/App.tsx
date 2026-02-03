@@ -43,16 +43,6 @@ function App() {
     setSelectedOutputIndex(index);
   };
 
-  useEffect(() => {
-    if (!inputAmount || inputAmount > MAXIMUM_VALUE) return;
-  }, [
-    inputAmount,
-    selectedInputIndex,
-    selectedOutputIndex,
-    priceFrom,
-    priceTo,
-  ]);
-
   const handleSwap = () => {
     setSelectedInputIndex(selectedOutputIndex);
     setSelectedOutputIndex(selectedInputIndex);
